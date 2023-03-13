@@ -1,5 +1,6 @@
 package com.nuracell.bs;
 
+import com.nuracell.bs.client.RestClient;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,13 +15,17 @@ public class BsApplication {
 	}
 
 	@Bean
-	public CommandLineRunner clr() {
+	public CommandLineRunner clr(RestClient restClient) {
 		return args -> {
 			System.out.println("Hello from BsApplication.java again arrre");
+
+			restClient.test();
 //			ApplicationContext appContext = new AnnotationConfigApplicationContext();
 //			System.out.println("appContext.getApplicationName() = " + appContext.getApplicationName());
 //			System.out.println("appContext.getDisplayName() = " + appContext.getDisplayName());
 //			System.out.println("appContext.getBean(\"clr\") = " + appContext.getBean("clr"));
 		};
 	}
+
+
 }
