@@ -18,14 +18,7 @@ public class BsApplication {
 	public CommandLineRunner clr(RestClient restClient) {
 		return args -> {
 			System.out.println("Hello from BsApplication.java again arrre");
-
 			restClient.test();
-//			ApplicationContext appContext = new AnnotationConfigApplicationContext();
-//			System.out.println("appContext.getApplicationName() = " + appContext.getApplicationName());
-//			System.out.println("appContext.getDisplayName() = " + appContext.getDisplayName());
-//			System.out.println("appContext.getBean(\"clr\") = " + appContext.getBean("clr"));
 		};
 	}
-
-
 }

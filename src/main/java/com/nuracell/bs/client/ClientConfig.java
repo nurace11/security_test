@@ -13,7 +13,6 @@ public class ClientConfig {
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplateBuilder()
-                .basicAuthentication("admin", "admin")
                 .setConnectTimeout(Duration.ofSeconds(2))
                 .setReadTimeout(Duration.ofSeconds(3))
                 .build();

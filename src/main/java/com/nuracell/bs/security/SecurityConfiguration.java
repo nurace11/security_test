@@ -36,10 +36,10 @@ public class SecurityConfiguration {
                 .csrf().disable()
 
                 .authorizeHttpRequests()
-                    .requestMatchers("/", "/api/**")
-                    .permitAll()
-                    .anyRequest() // any other request must be authenticated (optional)
-                    .hasAnyRole("admin")
+                .requestMatchers("/", "/api/**", "/api/v1/drones/**")
+                .permitAll()
+                .anyRequest() // any other request must be authenticated (optional)
+                .hasAnyRole("admin")
 
 //                .and()
 //                .sessionManagement()
@@ -83,26 +83,14 @@ public class SecurityConfiguration {
         return inMemoryUserDetailsManager;
     }
 
-    //
     // HTTP
     // Request headers
     // Authorization: [username:password encoded as Base64]
-    // Java code below
-
     public String encodedBasicAuth(String username, String password) {
-        String toEncode = username + ":" + password;
         var encoder = Base64.getEncoder();
-
-        StringBuilder theEncodedString = new StringBuilder();
-        byte[] bytes = encoder.encode(toEncode.getBytes());
-        for (byte b : bytes) {
-            theEncodedString.append((char) b );
-        }
-
-        return theEncodedString.toString();
+        byte[] bytes = encoder.encode((username + ":" + password).getBytes());
+        return new String(bytes);
     }
-
-
 
 
 }
