@@ -38,10 +38,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                     .requestMatchers("/", "/api/**")
                     .permitAll()
-                    .requestMatchers("/admin/**")
-                    .hasAnyRole("admin")
                     .anyRequest() // any other request must be authenticated (optional)
-                    .authenticated()
+                    .hasAnyRole("admin")
 
 //                .and()
 //                .sessionManagement()
@@ -82,7 +80,6 @@ public class SecurityConfiguration {
                 .build();
 
         InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager(admin, roxana);
-        System.out.println("userDetailsService" + inMemoryUserDetailsManager.loadUserByUsername("admin"));
         return inMemoryUserDetailsManager;
     }
 

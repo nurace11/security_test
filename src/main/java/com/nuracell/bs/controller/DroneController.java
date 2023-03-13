@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,12 +17,23 @@ public class DroneController {
     private final DroneService droneService;
 
     @GetMapping
+    public List<Drone> getDronesLimit10(@PathParam("limit") Long limit,
+                                        @PathParam("unlimited") boolean unlimited) {
+        if (!unlimited) {
+            return droneService.findDronesLimit(Objects.requireNonNullElse(limit, 5L));
+        }
+        return droneService.findAll();
+    }
+
+    @GetMapping("/all")
     public List<Drone> getAllRobots() {
         return droneService.findAll();
     }
 
+
     @GetMapping("{droneId}")
-    public Drone getDroneById(@PathParam("droneId") Long id) {
+    public Drone getDroneById(@PathVariable("droneId") Long id) {
+        System.out.println(id);
         return droneService.findById(id);
     }
 
@@ -36,7 +48,7 @@ public class DroneController {
     }
 
     @DeleteMapping("{droneId}")
-    public String deleteDrone(@PathParam("droneId") Long id) {
+    public String deleteDrone(@PathVariable("droneId") Long id) {
         return droneService.deleteById(id);
     }
 }

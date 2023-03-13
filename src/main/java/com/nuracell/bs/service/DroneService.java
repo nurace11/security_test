@@ -3,6 +3,7 @@ package com.nuracell.bs.service;
 import com.nuracell.bs.entity.Drone;
 import com.nuracell.bs.repository.DroneRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,11 @@ public class DroneService {
 
     public List<Drone> findAll() {
         return droneRepository.findAll();
+    }
+
+    public List<Drone> findDronesLimit(Long limit) {
+//        return droneRepository.findAll(PageRequest.of(0, limit)).getContent();
+        return droneRepository.findDronesLimit(limit);
     }
 
 
