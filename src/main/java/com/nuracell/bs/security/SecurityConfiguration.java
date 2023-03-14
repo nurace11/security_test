@@ -39,7 +39,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/", "/api/**", "/api/v1/drones/**")
                 .permitAll()
                 .anyRequest() // any other request must be authenticated (optional)
-                .hasAnyRole("admin")
+                .hasAnyRole("ADMIN")
 
 //                .and()
 //                .sessionManagement()
