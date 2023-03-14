@@ -1,6 +1,11 @@
 package com.nuracell.bs.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.GenericGenerators;
 
 import java.math.BigInteger;
+
 
 @Entity
 @Data
@@ -36,6 +42,7 @@ import java.math.BigInteger;
                 allocationSize = 1
         )
 )
+@Schema
 public class Player {
     @Id
     @GeneratedValue(
@@ -46,8 +53,16 @@ public class Player {
 //            strategy = GenerationType.TABLE,
 //            generator = "player_table_generator"
     )
+    @Schema(description = "Player identity")
+    @Min(1)
+    @NotNull
     Long id;
+    @Schema(description = "Player's high score")
+    @NotBlank
     BigInteger score;
+    @Schema(description = "Player's name")
+    @NotBlank
+    @Size(min = 1, max = 255)
     String name;
 
     public Player(BigInteger score, String name) {

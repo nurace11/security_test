@@ -2,6 +2,9 @@ package com.nuracell.bs.controller;
 
 import com.nuracell.bs.entity.Player;
 import com.nuracell.bs.service.PlayerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("api/v1/players")
 @RequiredArgsConstructor
+@Tag(name = "Players", description = "players API documentation")
 public class PlayerController {
     private final PlayerService playerService;
 
@@ -27,7 +31,9 @@ public class PlayerController {
     }
 
     @GetMapping("{playerId}")
-    public ResponseEntity<Player> getPlayer(@PathVariable("playerId") Long id) {
+    @Operation(summary = "Information about a player by his id")
+    public ResponseEntity<Player> getPlayer(
+            @Parameter(description = "Player ID") @PathVariable("playerId") Long id) {
         System.out.println(this.getClass() + ": getPlayer(%d)".formatted(id));
 
         return new ResponseEntity<Player>(playerService.findById(id), HttpStatusCode.valueOf(666));
