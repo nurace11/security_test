@@ -50,7 +50,7 @@ public class PlayerController {
 //        return ResponseEntity.ok(playerService.updatePlayer(id, player));
     }
 
-    @DeleteMapping("playerId")
+    @DeleteMapping("{playerId}")
     public Map<String, Boolean> deletePlayer(@PathVariable("playerId") Long id) {
         System.out.printf("[%s DELETE deletePlayer] id: %d %n", this.getClass(), id);
 
@@ -60,7 +60,7 @@ public class PlayerController {
         }};
     }
 
-    @PatchMapping("{id}/{name}")
+    @PatchMapping("{playerId}/{name}")
     public ResponseEntity<Player> updatePlayerName(@PathVariable("playerId") Long id,
                                                     @PathVariable("name") String name) {
         System.out.printf("[%s PATCH updatePlayerName] id: %d, name: %s %n", this.getClass(), id, name);

@@ -16,10 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -47,20 +44,37 @@ public class RestClient {
         fancyPrint(playerPostResponseEntity);
         fancyPrint(restTemplate.getForObject(url + "/1", Player.class));
 
+        List<Player> allPlayers = new ArrayList<>();
+        fancyPrint(restTemplate.getForObject(url, (Class<List<Drone>>)allPlayers.getClass()));
+        fancyPrint(restTemplate.getForEntity(url, (Class<List<Drone>>)allPlayers.getClass()));
+
         playerToPost.setName(playerToPost.getName().substring(11));
         playerToPost.setId(1L);
         playerHttpEntity = new HttpEntity<>(playerToPost);
         restTemplate.put(url + "/1", playerHttpEntity);
         fancyPrint(restTemplate.getForObject(url + "/1", Player.class));
 
-        // for
-        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        Player player = restTemplate.patchForObject(url + "/1/Amigo", playerHttpEntity, Player.class);
+        fancyPrint(restTemplate.getForObject(url + "/1", Player.class));
 
-        System.out.println(playerHttpEntity.getBody());
-        Player player = restTemplate.patchForObject(url + "/1/amigo"/* + UUID.randomUUID()*/, playerHttpEntity, Player.class);
-        System.out.println(player);
+        restTemplate.delete(url + "/1");
+        fancyPrint(restTemplate.getForObject(url + "/1", Player.class));
 
         //---------------- exchange() --------------\\
+
+        playerToPost = new Player(
+                new BigInteger(String.valueOf(rand.nextLong(Integer.MAX_VALUE, Long.MAX_VALUE))),
+                UUID.randomUUID().toString().substring(0, 8)
+        );
+        playerHttpEntity = new HttpEntity<>(playerToPost);
+
+        fancyPrint(restTemplate.exchange(url, HttpMethod.POST, playerHttpEntity, Player.class));
+        fancyPrint(restTemplate.exchange(url + "/2", HttpMethod.GET, null, Player.class));
+        fancyPrint(restTemplate.exchange(url, HttpMethod.GET, null, (Class<List<Player>>) allPlayers.getClass()));
+        playerToPost.setName("Homun_Culus");
+        fancyPrint(restTemplate.exchange(url + "/2", HttpMethod.PUT, playerHttpEntity, Player.class));
+        fancyPrint(restTemplate.exchange(url + "/2/don", HttpMethod.PATCH, null, Player.class));
+        fancyPrint(restTemplate.exchange(url + "/2", HttpMethod.DELETE, null, Map.class));
     }
 
     public void test() throws URISyntaxException, JsonProcessingException {
