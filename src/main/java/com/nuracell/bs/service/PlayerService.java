@@ -4,7 +4,9 @@ import com.nuracell.bs.entity.Player;
 import com.nuracell.bs.repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -28,7 +30,7 @@ public class PlayerService {
         Player updatePlayer = playerRepository.findById(id)
                         .orElseThrow(() -> new IllegalStateException("Player does not exist with id: %d".formatted(id)));
 
-        updatePlayer.setId(player.getId());
+//        updatePlayer.setId(player.getId());
         updatePlayer.setName(player.getName());
         updatePlayer.setScore(player.getScore());
         return playerRepository.save(updatePlayer);
@@ -48,7 +50,14 @@ public class PlayerService {
         return playerRepository.save(player);
     }
 
+    @Transactional
     public Player save(Player player) {
         return playerRepository.save(player);
+    }
+
+    public Integer updatePlayerId(Long id, Long newId) {
+        playerRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Player does not exist with id: %d".formatted(id)));
+        return playerRepository.updateId(id, newId);
     }
 }

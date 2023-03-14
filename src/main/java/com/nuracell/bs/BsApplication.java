@@ -1,6 +1,7 @@
 package com.nuracell.bs;
 
 import com.nuracell.bs.client.RestClient;
+import com.nuracell.bs.service.PlayerService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,7 +19,8 @@ public class BsApplication {
 	public CommandLineRunner clr(RestClient restClient) {
 		return args -> {
 			System.out.println("Hello from BsApplication.java again arrre");
-			restClient.test();
+//			restClient.test();
+			restClient.testPlayerREST();
 		};
 	}
 }
