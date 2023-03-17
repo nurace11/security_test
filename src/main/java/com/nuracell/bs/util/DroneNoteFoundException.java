@@ -1,5 +1,10 @@
 package com.nuracell.bs.util;
 
-public class DroneNoteFoundException extends RuntimeException {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
+@AllArgsConstructor
+public class DroneNoteFoundException extends RuntimeException {
+    Long id;
 }

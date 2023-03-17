@@ -28,7 +28,7 @@ public class DroneService {
 
     public Drone findById(Long id) {
         return droneRepository.findById(id)
-                .orElseThrow(DroneNoteFoundException::new);
+                .orElseThrow(() -> new DroneNoteFoundException(id));
     }
 
     public Integer save(Drone drone) {
@@ -46,7 +46,7 @@ public class DroneService {
             droneRepository.save(drone);
             return "Drone %d has been updated".formatted(drone.getId());
         } else {
-            throw new IllegalStateException("Drone not found");
+            throw new DroneNoteFoundException(drone.getId());
         }
     }
 
@@ -55,7 +55,7 @@ public class DroneService {
             droneRepository.deleteById(id);
             return "Drone %d has been deleted".formatted(id);
         } else {
-            throw new IllegalStateException("[DELETE] Drone not found");
+            throw new DroneNoteFoundException(id);
         }
 
     }

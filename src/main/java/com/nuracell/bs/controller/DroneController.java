@@ -35,8 +35,6 @@ public class DroneController {
         return droneService.findAll();
     }
 
-
-
     @GetMapping("{droneId}")
     public Drone getDroneById(@PathVariable("droneId") Long id) {
         return droneService.findById(id);
@@ -58,9 +56,9 @@ public class DroneController {
     }
 
     @ExceptionHandler
-    private ResponseEntity<DroneErrorResponse> handleException(Exception e) {
+    private ResponseEntity<DroneErrorResponse> handleException(DroneNoteFoundException e) {
         DroneErrorResponse droneErrorResponse = new DroneErrorResponse(
-                "Drone with this id not found",
+                "Drone with this id: %d not found ".formatted(e.getId()),
                 System.currentTimeMillis()
         );
 
