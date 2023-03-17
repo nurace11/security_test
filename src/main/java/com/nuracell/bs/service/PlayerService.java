@@ -4,12 +4,9 @@ import com.nuracell.bs.entity.Player;
 import com.nuracell.bs.exception.PlayerNotFoundException;
 import com.nuracell.bs.repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -50,7 +47,7 @@ public class PlayerService {
     }
 
     @Transactional
-    public Player save(Player player) {
+    public Player addPlayer(Player player) {
         return playerRepository.save(player);
     }
 

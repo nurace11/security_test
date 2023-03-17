@@ -2,19 +2,16 @@ package com.nuracell.bs.controller;
 
 import com.nuracell.bs.entity.Player;
 import com.nuracell.bs.service.PlayerService;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -51,7 +48,7 @@ public class PlayerController {
     public /*ResponseEntity<*/Player savePlayer(@RequestBody Player player) {
         System.out.printf("[CONTROLLER] Player ID: %d%n", player.getId());
 
-        return playerService.save(player);
+        return playerService.addPlayer(player);
 //        return new ResponseEntity<Player>(playerService.save(player), HttpStatus.OK);
     }
 
