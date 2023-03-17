@@ -2,6 +2,7 @@ package com.nuracell.bs.service;
 
 import com.nuracell.bs.entity.Drone;
 import com.nuracell.bs.repository.DroneRepository;
+import com.nuracell.bs.util.DroneNoteFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class DroneService {
 
     public Drone findById(Long id) {
         return droneRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("Drone with id %d not found".formatted(id)));
+                .orElseThrow(DroneNoteFoundException::new);
     }
 
     public Integer save(Drone drone) {

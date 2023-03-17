@@ -2,11 +2,16 @@ package com.nuracell.bs.controller;
 
 import com.nuracell.bs.entity.Drone;
 import com.nuracell.bs.service.DroneService;
+import com.nuracell.bs.util.DroneErrorResponse;
+import com.nuracell.bs.util.DroneNoteFoundException;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,9 +36,9 @@ public class DroneController {
     }
 
 
+
     @GetMapping("{droneId}")
     public Drone getDroneById(@PathVariable("droneId") Long id) {
-        System.out.println(id);
         return droneService.findById(id);
     }
 
@@ -50,5 +55,15 @@ public class DroneController {
     @DeleteMapping("{droneId}")
     public String deleteDrone(@PathVariable("droneId") Long id) {
         return droneService.deleteById(id);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<DroneErrorResponse> handleException(Exception e) {
+        DroneErrorResponse droneErrorResponse = new DroneErrorResponse(
+                "Drone with this id not found",
+                System.currentTimeMillis()
+        );
+
+        return new ResponseEntity<>(droneErrorResponse, HttpStatus.NOT_FOUND);
     }
 }
