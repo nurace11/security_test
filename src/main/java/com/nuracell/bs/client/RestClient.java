@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nuracell.bs.entity.Drone;
 import com.nuracell.bs.entity.Player;
+import com.nuracell.bs.exception.PlayerNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigInteger;
@@ -25,15 +27,20 @@ public class RestClient {
 
     private final Random rand = new Random();
 
-    public void testPlayerREST() throws Exception {
+    public void testPlayerREST() throws URISyntaxException {
         URI url = new URI("http://localhost:8080/api/v1/players");
 
         //---------------- **For**() -------------\\
-        ResponseEntity<Player> playerResponseEntity = restTemplate.getForEntity(url + "/1", Player.class);
-        fancyPrint(playerResponseEntity);
-
-        Player playerResponseObject = restTemplate.getForObject(url + "/1", Player.class);
-        fancyPrint(playerResponseObject);
+        try {
+            restTemplate.getForEntity(url + "/1", Player.class);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        try {
+            restTemplate.getForObject(url + "/1", Player.class);
+        } catch (HttpClientErrorException e) {
+            System.out.println(e);
+        }
 
         Player playerToPost = new Player(
                 new BigInteger(String.valueOf(rand.nextLong(Integer.MAX_VALUE, Long.MAX_VALUE))),
@@ -58,7 +65,12 @@ public class RestClient {
         fancyPrint(restTemplate.getForObject(url + "/1", Player.class));
 
         restTemplate.delete(url + "/1");
-        fancyPrint(restTemplate.getForObject(url + "/1", Player.class));
+        try {
+            fancyPrint(restTemplate.getForObject(url + "/1", Player.class));
+        } catch (HttpClientErrorException e) {
+            System.out.println(e);
+        }
+
 
         //---------------- exchange() --------------\\
 
