@@ -87,6 +87,14 @@ public class RestClient {
         fancyPrint(restTemplate.exchange(url + "/2", HttpMethod.PUT, playerHttpEntity, Player.class));
         fancyPrint(restTemplate.exchange(url + "/2/don", HttpMethod.PATCH, null, Player.class));
         fancyPrint(restTemplate.exchange(url + "/2", HttpMethod.DELETE, null, Map.class));
+
+        // create 5 players
+        for (int i = 0; i < 5; i++) {
+            playerToPost.setName(UUID.randomUUID().toString().substring(0, 8));
+            playerToPost.setScore(new BigInteger(String.valueOf(rand.nextLong(Integer.MAX_VALUE, Long.MAX_VALUE))));
+            playerHttpEntity = new HttpEntity<>(playerToPost);
+            fancyPrint(restTemplate.exchange(url, HttpMethod.POST, playerHttpEntity, Player.class));
+        }
     }
 
     public void test() throws URISyntaxException, JsonProcessingException {

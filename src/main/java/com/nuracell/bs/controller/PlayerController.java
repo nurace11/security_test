@@ -20,6 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/players")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 @Tag(name = "Players", description = "players API documentation")
 public class PlayerController {
@@ -31,7 +32,7 @@ public class PlayerController {
             @RequestParam(required = false) @Parameter(hidden = true) boolean flag) {
         System.out.println(this.getClass() + ": getPlayers");
 
-        return new ResponseEntity<List<Player>>(playerService.findAll(), HttpStatusCode.valueOf(999));
+        return ResponseEntity.ok(playerService.findAll());
     }
 
     @GetMapping("{playerId}")
