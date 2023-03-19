@@ -1,8 +1,7 @@
 package com.nuracell.bs.controller;
 
 import com.nuracell.bs.entity.Player;
-import com.nuracell.bs.exception.PersonNotValidException;
-import com.nuracell.bs.exception.PlayerNotFoundException;
+import com.nuracell.bs.exception.PlayerNotValidException;
 import com.nuracell.bs.service.PlayerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -65,7 +64,7 @@ public class PlayerController {
                 errorMsg.append(error.getField()).append(" - ").append(error.getDefaultMessage()).append(";");
             }
 
-            throw new PersonNotValidException(errorMsg.toString());
+            throw new PlayerNotValidException(errorMsg.toString());
 
         }
 
@@ -91,7 +90,7 @@ public class PlayerController {
                 errorMsg.append(error.getField()).append(" - ").append(error.getDefaultMessage()).append(";");
             }
 
-            throw new PersonNotValidException(errorMsg.toString());
+            throw new PlayerNotValidException(errorMsg.toString());
 
         }
 

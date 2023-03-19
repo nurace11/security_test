@@ -2,10 +2,10 @@ package com.nuracell.bs.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class PersonNotValidException extends BaseException {
-    public PersonNotValidException(String message) {
+public class PlayerNotValidException extends BaseException {
+    public PlayerNotValidException(String message) {
         super(
-                HttpStatus.NOT_FOUND,
+                HttpStatus.BAD_REQUEST,
                 new ApiError("player.not.valid",
                         message)
         );

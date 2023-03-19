@@ -58,10 +58,10 @@ public class Player {
     @NotNull
     Long id;
     @Schema(description = "Player's high score")
-    @Min(1)
+    @Min(value = 1, message = "Score must be bigger than 1")
     BigInteger score;
     @Schema(description = "Player's name")
-    @NotBlank
+    @NotBlank(message = "Name should not be empty")
     @Size(min = 1, max = 255)
     String name;
 

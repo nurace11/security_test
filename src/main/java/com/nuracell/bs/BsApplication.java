@@ -2,6 +2,7 @@ package com.nuracell.bs;
 
 import com.nuracell.bs.client.RestClient;
 import com.nuracell.bs.service.PlayerService;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,5 +23,10 @@ public class BsApplication {
 //			restClient.test();
 			restClient.testPlayerREST();
 		};
+	}
+
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
 	}
 }
