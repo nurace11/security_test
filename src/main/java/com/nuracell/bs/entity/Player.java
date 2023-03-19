@@ -58,7 +58,7 @@ public class Player {
     @NotNull
     Long id;
     @Schema(description = "Player's high score")
-    @NotBlank
+    @Min(1)
     BigInteger score;
     @Schema(description = "Player's name")
     @NotBlank

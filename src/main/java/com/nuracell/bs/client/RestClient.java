@@ -84,6 +84,7 @@ public class RestClient {
         fancyPrint(restTemplate.exchange(url + "/2", HttpMethod.GET, null, Player.class));
         fancyPrint(restTemplate.exchange(url, HttpMethod.GET, null, (Class<List<Player>>) allPlayers.getClass()));
         playerToPost.setName("Homun_Culus");
+        playerToPost.setId(2L);
         fancyPrint(restTemplate.exchange(url + "/2", HttpMethod.PUT, playerHttpEntity, Player.class));
         fancyPrint(restTemplate.exchange(url + "/2/don", HttpMethod.PATCH, null, Player.class));
         fancyPrint(restTemplate.exchange(url + "/2", HttpMethod.DELETE, null, Map.class));
