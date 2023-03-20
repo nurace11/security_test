@@ -1,6 +1,8 @@
 package com.nuracell.bs;
 
 import com.nuracell.bs.client.RestClient;
+import com.nuracell.bs.entity.AppUser;
+import com.nuracell.bs.service.AppUserDetailsService;
 import com.nuracell.bs.service.PlayerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
@@ -9,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class BsApplication {
@@ -17,10 +20,14 @@ public class BsApplication {
 	}
 
 	@Bean
-	public CommandLineRunner clr(RestClient restClient) {
+	public CommandLineRunner clr(RestClient restClient,
+								 AppUserDetailsService appUserDetailsService,
+								 PasswordEncoder passwordEncoder) {
 		return args -> {
 			System.out.println("Hello from BsApplication.java again arrre");
-//			restClient.test();
+
+			appUserDetailsService.addAppUser(new AppUser("admin", ("admin"), "ROLE_ADMIN"));
+			System.out.println("[APPUSER] " + appUserDetailsService.loadUserByUsername("admin"));
 			restClient.testPlayerREST();
 		};
 	}
