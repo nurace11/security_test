@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -32,7 +33,6 @@ import java.util.Base64;
 public class SecurityConfiguration {
 
     private final PasswordEncoder passwordEncoder;
-    private final AuthProviderImpl authProvider;
     private final AppUserDetailsService appUserDetailsService;
 
     @Bean
@@ -43,16 +43,25 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/", "/api/**", "/api/v1/drones/**")
                 .permitAll()
-                .anyRequest() // any other request must be authenticated (optional)
+                .anyRequest()
                 .hasAnyRole("ADMIN")
 
 //                .and()
 //                .sessionManagement()
 //                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authenticationProvider(authProvider)
+                .authenticationProvider(authenticationProvider())
                 .httpBasic();
 
         return http.build();
+    }
+
+    @Bean
+    AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(appUserDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
+
+        return authenticationProvider;
     }
 }

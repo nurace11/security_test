@@ -10,7 +10,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-@Component
+@Deprecated // this class is needed if we have specific authentication or if authentication made on CAS
+//@Component
 @RequiredArgsConstructor
 public class AuthProviderImpl implements AuthenticationProvider {
     private final AppUserDetailsService appUserDetailsService;
