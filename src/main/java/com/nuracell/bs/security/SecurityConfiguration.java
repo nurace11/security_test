@@ -1,20 +1,21 @@
 package com.nuracell.bs.security;
 
+import com.nuracell.bs.configuration.JWTFilter;
 import com.nuracell.bs.entity.AppUser;
 import com.nuracell.bs.repository.AppUserRepository;
 import com.nuracell.bs.service.AppUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.*;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,6 +24,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.util.Base64;
 
@@ -34,6 +36,8 @@ public class SecurityConfiguration {
 
     private final PasswordEncoder passwordEncoder;
     private final AppUserDetailsService appUserDetailsService;
+
+    private final JWTFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -47,11 +51,18 @@ public class SecurityConfiguration {
                 .hasAnyRole("ADMIN")
 
 //                .and()
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .authenticationProvider(authenticationProvider())
+//                .httpBasic()
+
                 .and()
-                .authenticationProvider(authenticationProvider())
-                .httpBasic();
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)// spring will not save session anymore;
+
+                .and()
+                .addFilterAfter(jwtFilter, BasicAuthenticationFilter.class);
+
+//        http.addFilter(jwtFilter);
+
 
         return http.build();
     }
@@ -63,5 +74,25 @@ public class SecurityConfiguration {
         authenticationProvider.setPasswordEncoder(passwordEncoder);
 
         return authenticationProvider;
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager() {
+        return authentication -> {
+            String username = authentication.getName();
+
+            UserDetails appUserDetails = appUserDetailsService.loadUserByUsername(username);
+
+
+            String password = authentication.getCredentials().toString();
+
+            // compares string with hashed password
+            if (!password.equals(appUserDetails.getPassword())) {
+                System.out.println(appUserDetails.getPassword());
+                throw new BadCredentialsException("Incorrect password");
+            }
+
+            return new UsernamePasswordAuthenticationToken(appUserDetails, password, appUserDetails.getAuthorities());
+        };
     }
 }

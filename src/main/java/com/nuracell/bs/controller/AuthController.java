@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Deprecated
+//@RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
