@@ -47,7 +47,7 @@ public class PlayerService {
     }
 
     @Transactional
-    public Player addPlayer(Player player) {
+    public Player saveNewPlayer(Player player) {
         return playerRepository.save(player);
     }
 

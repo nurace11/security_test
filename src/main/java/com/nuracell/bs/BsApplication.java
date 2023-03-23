@@ -26,7 +26,7 @@ public class BsApplication {
 		return args -> {
 			System.out.println("Hello from BsApplication.java again arrre");
 			appUserDetailsService.addAppUser(new AppUser("admin", passwordEncoder.encode("admin"), "ROLE_ADMIN"));
-			restClient.testPlayerREST();
+//			restClient.testPlayerREST();
 		};
 	}
 

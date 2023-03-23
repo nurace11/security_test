@@ -55,7 +55,7 @@ public class PlayerController {
             List<FieldError> errors = bindingResult.getFieldErrors();
 
             if (errors.size() == 1 && errors.get(0).getField().equals("id")) {
-                return ResponseEntity.ok(playerService.addPlayer(player));
+                return ResponseEntity.ok(playerService.saveNewPlayer(player));
             }
 
             StringBuilder errorMsg = new StringBuilder();
@@ -68,7 +68,7 @@ public class PlayerController {
 
         }
 
-        return new ResponseEntity<>(playerService.addPlayer(player), HttpStatus.OK);
+        return new ResponseEntity<>(playerService.saveNewPlayer(player), HttpStatus.OK);
     }
 
     @PutMapping("{playerId}")

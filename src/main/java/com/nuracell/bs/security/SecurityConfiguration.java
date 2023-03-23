@@ -41,7 +41,7 @@ public class SecurityConfiguration {
                 .csrf().disable()
 
                 .authorizeHttpRequests()
-                .requestMatchers("/", "/api/**", "/api/v1/drones/**")
+                .requestMatchers("/", "/api/**", "/api/v1/drones/**", "/auth/**")
                 .permitAll()
                 .anyRequest()
                 .hasAnyRole("ADMIN")
