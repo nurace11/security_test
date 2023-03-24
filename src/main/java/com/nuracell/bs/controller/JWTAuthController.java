@@ -34,8 +34,7 @@ public class JWTAuthController {
     private final JWTUtil jwtUtil;
     private final ModelMapper modelMapper;
 
-//    private final AuthenticationManager authenticationManager; todo: make this work. Manager vs Provider
-    private final AuthenticationProvider authenticationProvider;
+    private final AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
     public Map<String, String> performLogin(@RequestBody @Valid AuthenticationDTO authDTO,
@@ -56,7 +55,7 @@ public class JWTAuthController {
                 new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getPassword());
 
         try {
-            authenticationProvider.authenticate(authInputToken);
+            authenticationManager.authenticate(authInputToken);
         } catch (BadCredentialsException e) {
             return Map.of("message", "Incorrect credentials");
         }

@@ -24,6 +24,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.util.Base64;
@@ -33,36 +34,27 @@ import java.util.Base64;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-
     private final PasswordEncoder passwordEncoder;
     private final AppUserDetailsService appUserDetailsService;
-
     private final JWTFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .httpBasic().disable()
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 
                 .authorizeHttpRequests()
-                .requestMatchers("/", "/api/**", "/api/v1/drones/**", "/auth/**")
-                .permitAll()
-                .anyRequest()
-                .hasAnyRole("ADMIN")
-
-//                .and()
-//                .authenticationProvider(authenticationProvider())
-//                .httpBasic()
+                    .requestMatchers("/", "/api/**", "/auth/**", "/cookie/**")
+                    .permitAll()
+                    .anyRequest()
+                    .hasAnyRole("ADMIN")
 
                 .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)// spring will not save session anymore;
 
-                .and()
-                .addFilterAfter(jwtFilter, BasicAuthenticationFilter.class);
-
-//        http.addFilter(jwtFilter);
-
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS);// spring will not save session anymore;
 
         return http.build();
     }
@@ -83,11 +75,9 @@ public class SecurityConfiguration {
 
             UserDetails appUserDetails = appUserDetailsService.loadUserByUsername(username);
 
-
             String password = authentication.getCredentials().toString();
 
-            // compares string with hashed password
-            if (!password.equals(appUserDetails.getPassword())) {
+            if (!passwordEncoder.matches(password, appUserDetails.getPassword())) {
                 System.out.println(appUserDetails.getPassword());
                 throw new BadCredentialsException("Incorrect password");
             }
