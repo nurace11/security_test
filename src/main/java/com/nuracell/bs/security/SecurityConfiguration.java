@@ -52,7 +52,6 @@ public class SecurityConfiguration {
                     .hasAnyRole("ADMIN")
 
                 .and()
-
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS);// spring will not save session anymore;
 
