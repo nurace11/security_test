@@ -2,6 +2,7 @@ package com.nuracell.bs.security;
 
 import com.nuracell.bs.configuration.JWTFilter;
 import com.nuracell.bs.entity.AppUser;
+import com.nuracell.bs.exception.CustomAccessDeniedHandler;
 import com.nuracell.bs.repository.AppUserRepository;
 import com.nuracell.bs.service.AppUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +25,18 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.util.Base64;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(securedEnabled = true, // @Secured
+        prePostEnabled = true, // @PreAuthorize, @PostAuthorize
+        jsr250Enabled = true) // @RoleAllowed (allows only role-based security)
 @RequiredArgsConstructor
 public class SecurityConfiguration {
     private final PasswordEncoder passwordEncoder;
@@ -42,18 +47,32 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .httpBasic().disable()
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+//                .httpBasic().disable()
 
                 .authorizeHttpRequests()
-                    .requestMatchers("/", "/api/**", "/auth/**", "/cookie/**")
+                    .requestMatchers("/", "/api/**", "/auth/**", "/cookie/**", "/security/**")
                     .permitAll()
                     .anyRequest()
                     .hasAnyRole("ADMIN")
 
+//                .and()
+//                    .httpBasic()
+
+//                .and()
+//                    .formLogin()
+//                    .failureHandler()
+//                    .successHandler()
+
+                .and()
+                    .exceptionHandling()
+                    .accessDeniedHandler(accessDeniedHandler())
+
                 .and()
                     .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS);// spring will not save session anymore;
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                .and()
+                    .addFilterAfter(jwtFilter,  UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -83,5 +102,10 @@ public class SecurityConfiguration {
 
             return new UsernamePasswordAuthenticationToken(appUserDetails, password, appUserDetails.getAuthorities());
         };
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
     }
 }

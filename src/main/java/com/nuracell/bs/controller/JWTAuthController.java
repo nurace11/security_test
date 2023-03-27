@@ -30,7 +30,6 @@ import java.util.Map;
 public class JWTAuthController {
     private final RegistrationService registrationService;
 
-
     private final JWTUtil jwtUtil;
     private final ModelMapper modelMapper;
 

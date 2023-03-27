@@ -18,7 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class JWTCookieFilter extends OncePerRequestFilter {
 
@@ -30,11 +30,14 @@ public class JWTCookieFilter extends OncePerRequestFilter {
         Cookie[] cookies = request.getCookies();
 
         String jwt = null;
-        for (Cookie c : cookies) {
-            if(c.getName().equals("jwt-token")) {
-                jwt = c.getValue();
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if(c.getName().equals("jwt-token")) {
+                    jwt = c.getValue();
+                }
             }
         }
+
 
         if(jwt != null && !jwt.isBlank()) {
             try {
@@ -55,7 +58,7 @@ public class JWTCookieFilter extends OncePerRequestFilter {
             }
         } else {
             response.sendError(/*HttpServletResponse.SC_BAD_REQUEST*/HttpStatus.BAD_REQUEST.value(),
-                    "Invalid JWT Token in Bearer Header");
+                    "Invalid JWT Token in Authorization Header");
         }
 
         filterChain.doFilter(request, response);

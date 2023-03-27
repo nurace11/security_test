@@ -34,6 +34,15 @@ public class JWTFilter extends OncePerRequestFilter {
             if(jwt.isBlank()) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                         "Invalid JWT Token in Bearer Header");
+
+//                response.sendRedirect("/access-denied");
+
+//                request.setAttribute(this.getFilterName() + ".FILTERED",
+//                        Boolean.TRUE);
+//
+//                doFilterNestedErrorDispatch(request, response, filterChain);
+//
+////                doFilterInternal(request, response, filterChain);
             } else {
                 try {
                     String username = jwtUtil.validateTokenAndRetrieveClaim(jwt);
@@ -54,7 +63,6 @@ public class JWTFilter extends OncePerRequestFilter {
             }
         }
 
-        // sending request and response to next filter
         filterChain.doFilter(request, response);
     }
 }
