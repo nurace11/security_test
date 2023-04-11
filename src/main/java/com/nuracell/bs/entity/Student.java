@@ -17,10 +17,7 @@ public class Student {
     private String email;
     private Integer age;
 
-    @OneToOne(
-            mappedBy = "student",
-            orphanRemoval = true
-    )
+    @OneToOne(mappedBy = "student")
     private StudentIdCard studentIdCard;
 
     public Student(String firstName, String lastName, String email, Integer age) {
