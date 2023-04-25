@@ -54,9 +54,9 @@ class BsApplicationTests {
 		System.out.println(decodedPassword);
 	}
 
-	@Test
-	public void stackOverFlowTest() {
-		stackOverFlowTest();
-	}
+//	@Test
+//	public void stackOverFlowTest() {
+//		stackOverFlowTest();
+//	}
 
 }
