@@ -3,6 +3,7 @@ package com.nuracell.bs;
 import com.github.javafaker.Faker;
 import com.nuracell.bs.client.RestClient;
 import com.nuracell.bs.entity.AppUser;
+import com.nuracell.bs.entity.Book;
 import com.nuracell.bs.entity.Student;
 import com.nuracell.bs.entity.StudentIdCard;
 import com.nuracell.bs.repository.StudentIdCardRepository;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -50,12 +52,55 @@ public class BsApplication {
 		return args -> {
 //			generateRandomStudents(studentRepository);
 
-			generateStudentsWIthIdCards(studentIdCardRepository);
+			generateStudentsWIthIdCards(studentIdCardRepository, studentRepository);
 
 //			sortingStudents(studentRepository);
 
 //			studentsPagination(studentRepository);
 		};
+	}
+
+
+
+	private void generateStudentsWIthIdCards(StudentIdCardRepository studentIdCardRepository,
+											 StudentRepository studentRepository) {
+		Faker faker = new Faker();
+
+		List<StudentIdCard> studentIdCards = new ArrayList<>();
+
+		for (int i = 0; i < 5; i++) {
+			String firstName = faker.name().firstName();
+			String lastName = faker.name().lastName();
+			String email = "%s.%s@gmail.com".formatted(firstName, lastName);
+
+			Student student = new Student(
+					firstName,
+					lastName,
+					email,
+					faker.number().numberBetween(17, 55)
+			);
+
+			student.addBook(new Book(UUID.randomUUID().toString(), LocalDateTime.now().minusDays(4)));
+			student.addBook(new Book(UUID.randomUUID().toString(), LocalDateTime.now().minusDays(1)));
+			student.addBook(new Book(UUID.randomUUID().toString(), LocalDateTime.now().minusYears(2)));
+
+			studentIdCards.add(
+					new StudentIdCard(
+							UUID.randomUUID().toString().substring(0,15),
+							student
+
+					)
+			);
+		}
+
+		studentIdCardRepository.saveAll(studentIdCards);
+		studentIdCardRepository.findById(1L).ifPresent(
+				sc -> System.out.println(sc)
+		);
+
+		studentRepository.findById(1L).ifPresent(
+				System.out::println
+		);
 	}
 
 	private void studentsPagination(StudentRepository studentRepository) {
@@ -93,32 +138,6 @@ public class BsApplication {
 		}
 
 		studentRepository.saveAll(students);
-	}
-
-	private void generateStudentsWIthIdCards(StudentIdCardRepository studentIdCardRepository) {
-		Faker faker = new Faker();
-
-		List<StudentIdCard> studentIdCards = new ArrayList<>();
-
-		for (int i = 0; i < 5; i++) {
-			String firstName = faker.name().firstName();
-			String lastName = faker.name().lastName();
-			String email = "%s.%s@gmail.com".formatted(firstName, lastName);
-			studentIdCards.add(
-					new StudentIdCard(
-							UUID.randomUUID().toString().substring(0,15),
-							new Student(
-									firstName,
-									lastName,
-									email,
-									faker.number().numberBetween(17,55)
-							)
-
-					)
-			);
-		}
-
-		studentIdCardRepository.saveAll(studentIdCards);
 	}
 
 	@Bean
