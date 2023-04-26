@@ -38,13 +38,17 @@ jobs:
     
     steps:
       - name: List package
-        run : ls -al
+        run : |
+          pwd
+          ls -al
     
       - name: Git clone
         uses: actions/checkout@v1 
         
       - name: List package
-        run : ls -al
+        run : |
+          pwd
+          ls -al
         
   test:
     runs-on: ubuntu-latest
