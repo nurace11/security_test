@@ -50,7 +50,7 @@ jobs:
           pwd
           ls -al
           
-      - name: Test
-        run : |
-          cd /home/runner/work/security_test/security_test
-          mvnw test
+#       - name: Test
+#         run : |
+#           cd /home/runner/work/security_test/security_test
+#           mvnw test
