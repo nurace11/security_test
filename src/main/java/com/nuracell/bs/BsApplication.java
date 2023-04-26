@@ -99,7 +99,16 @@ public class BsApplication {
 		);
 
 		studentRepository.findById(1L).ifPresent(
-				System.out::println
+				s -> {
+					System.out.println("fetch book lazy...");
+					List<Book> books = s.getBooks();
+					System.out.println(books);
+//					books.forEach(
+//							book -> {
+//								System.out.println(s.getFirstName() + " has " + book);
+//							}
+//					);
+				}
 		);
 	}
 
