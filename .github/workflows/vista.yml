@@ -25,6 +25,12 @@ jobs:
         
       - name: List Los Angeles
         run : ls -la
+        
+      - name: Pipe commands
+        run : echo "$USERNAME:$PASSWORD"
+        env :
+          USERNAME: "admin"
+          PASSWORD: "adminpassword"
   
   git_clone:
     runs-on: ubuntu-latest
