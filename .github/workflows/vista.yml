@@ -15,4 +15,10 @@ jobs:
     
     steps:
       - name: List package
-        run: ls -al
+        run : ls -al
+        
+      - name: Whoami
+        run : whoami
+        
+      - name: Create file
+        run : echo "new file" > file.txt
