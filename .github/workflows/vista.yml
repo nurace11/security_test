@@ -51,5 +51,10 @@ jobs:
     needs  : [git_clone]
     
     steps: 
+      - name: Path
+        run : |
+          pwd
+          ls -la
+    
       - name: Test
         run : mvnw test
