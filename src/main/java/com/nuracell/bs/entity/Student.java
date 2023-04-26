@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,32 +39,28 @@ public class Student {
     @ToString.Exclude
     private List<Book> books;
 
-    @ManyToMany(
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
-    )
-    @JoinTable(
-            name = "enrolment",
-            joinColumns = @JoinColumn(
-                    name = "student_id",
-                    foreignKey = @ForeignKey(name = "enrolment_student_id_fk")
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "course_id",
-                    foreignKey = @ForeignKey(name = "enrolment_course_id_fk")
-            )
-
+    @OneToMany(
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            mappedBy = "student"
     )
     @ToString.Exclude
-    private List<Course> courses = new ArrayList<>();
+    private List<Enrolment> enrolments = new ArrayList<>();
 
-    public void enrolToCourse(Course course) {
-        courses.add(course);
-        course.getStudents().add(this);
+    public void addEnrolment(Course course) {
+        Enrolment enrolment = new Enrolment(this, course, LocalDateTime.now());
+        if (!enrolments.contains(enrolment)) {
+            enrolments.add(enrolment);
+        }
     }
 
-    public void unEnrolCourse(Course course) {
-        courses.remove(course);
-        course.getStudents().remove(this);
+    public void addEnrolment(Enrolment enrolment) {
+        if (!enrolments.contains(enrolment)) {
+            enrolments.add(enrolment);
+        }
+    }
+
+    public void removeEnrolment(Enrolment enrolment) {
+        enrolments.remove(enrolment);
     }
 
     public void addBook(Book book) {

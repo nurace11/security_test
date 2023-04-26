@@ -87,11 +87,13 @@ public class BsApplication {
 					)
 			);
 
-			student.enrolToCourse(new Course(
-					"CS", "IT"
-			));
-			student.enrolToCourse(new Course(
-					UUID.randomUUID().toString(), "IT"
+			student.addEnrolment(new Enrolment(
+					new EnrolmentId(i + 1L, i + 1L),
+					student,
+					new Course(
+							UUID.randomUUID().toString(), UUID.randomUUID().toString().substring(0, 2).toUpperCase()
+					),
+					LocalDateTime.now()
 			));
 
 			students.add(student);
