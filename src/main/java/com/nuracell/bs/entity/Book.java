@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 public class Book {
     @Id
     @SequenceGenerator(
-            name = "book_sequence",
-            sequenceName = "book_sequence_generator",
+            name = "book_sequence_generator",
+            sequenceName = "book_sequence",
             allocationSize = 1
     )
     @GeneratedValue(

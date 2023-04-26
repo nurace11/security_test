@@ -2,10 +2,7 @@ package com.nuracell.bs;
 
 import com.github.javafaker.Faker;
 import com.nuracell.bs.client.RestClient;
-import com.nuracell.bs.entity.AppUser;
-import com.nuracell.bs.entity.Book;
-import com.nuracell.bs.entity.Student;
-import com.nuracell.bs.entity.StudentIdCard;
+import com.nuracell.bs.entity.*;
 import com.nuracell.bs.repository.StudentIdCardRepository;
 import com.nuracell.bs.repository.StudentRepository;
 import com.nuracell.bs.service.AppUserDetailsService;
@@ -52,7 +49,7 @@ public class BsApplication {
 		return args -> {
 //			generateRandomStudents(studentRepository);
 
-			generateStudentsWIthIdCards(studentIdCardRepository, studentRepository);
+			generateStudentsWIthIdCards(studentRepository);
 
 //			sortingStudents(studentRepository);
 
@@ -62,11 +59,10 @@ public class BsApplication {
 
 
 
-	private void generateStudentsWIthIdCards(StudentIdCardRepository studentIdCardRepository,
-											 StudentRepository studentRepository) {
+	private void generateStudentsWIthIdCards(StudentRepository studentRepository) {
 		Faker faker = new Faker();
 
-		List<StudentIdCard> studentIdCards = new ArrayList<>();
+		List<Student> students = new ArrayList<>();
 
 		for (int i = 0; i < 5; i++) {
 			String firstName = faker.name().firstName();
@@ -84,32 +80,24 @@ public class BsApplication {
 			student.addBook(new Book(UUID.randomUUID().toString(), LocalDateTime.now().minusDays(1)));
 			student.addBook(new Book(UUID.randomUUID().toString(), LocalDateTime.now().minusYears(2)));
 
-			studentIdCards.add(
+			student.setStudentIdCard(
 					new StudentIdCard(
 							UUID.randomUUID().toString().substring(0,15),
 							student
-
 					)
 			);
+
+			student.enrolToCourse(new Course(
+					"CS", "IT"
+			));
+			student.enrolToCourse(new Course(
+					UUID.randomUUID().toString(), "IT"
+			));
+
+			students.add(student);
 		}
 
-		studentIdCardRepository.saveAll(studentIdCards);
-		studentIdCardRepository.findById(1L).ifPresent(
-				sc -> System.out.println(sc)
-		);
-
-		studentRepository.findById(1L).ifPresent(
-				s -> {
-					System.out.println("fetch book lazy...");
-					List<Book> books = s.getBooks();
-					System.out.println(books);
-//					books.forEach(
-//							book -> {
-//								System.out.println(s.getFirstName() + " has " + book);
-//							}
-//					);
-				}
-		);
+		studentRepository.saveAll(students);
 	}
 
 	private void studentsPagination(StudentRepository studentRepository) {

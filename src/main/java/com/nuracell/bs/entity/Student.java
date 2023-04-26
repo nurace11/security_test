@@ -22,7 +22,11 @@ public class Student {
     private String email;
     private Integer age;
 
-    @OneToOne(mappedBy = "student")
+    @OneToOne(
+            mappedBy = "student",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
     private StudentIdCard studentIdCard;
 
     @OneToMany(
@@ -33,6 +37,34 @@ public class Student {
     )
     @ToString.Exclude
     private List<Book> books;
+
+    @ManyToMany(
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
+    )
+    @JoinTable(
+            name = "enrolment",
+            joinColumns = @JoinColumn(
+                    name = "student_id",
+                    foreignKey = @ForeignKey(name = "enrolment_student_id_fk")
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "course_id",
+                    foreignKey = @ForeignKey(name = "enrolment_course_id_fk")
+            )
+
+    )
+    @ToString.Exclude
+    private List<Course> courses = new ArrayList<>();
+
+    public void enrolToCourse(Course course) {
+        courses.add(course);
+        course.getStudents().add(this);
+    }
+
+    public void unEnrolCourse(Course course) {
+        courses.remove(course);
+        course.getStudents().remove(this);
+    }
 
     public void addBook(Book book) {
         if (books == null) {
