@@ -22,3 +22,6 @@ jobs:
         
       - name: Create file
         run : echo "new file" > file.txt
+        
+      - name: List Los Angeles
+        run : ls -la
