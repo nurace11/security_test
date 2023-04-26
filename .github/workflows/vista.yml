@@ -28,6 +28,7 @@ jobs:
   
   git_clone:
     runs-on: ubuntu-latest
+    needs  : [simple_commands] 
     
     steps:
       - name: List package
