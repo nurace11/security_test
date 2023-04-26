@@ -51,4 +51,6 @@ jobs:
           ls -al
           
       - name: Test
-        run : mvnw test
+        run : |
+          cd /home/runner/work/security_test/security_test
+          mvnw test
