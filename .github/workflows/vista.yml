@@ -25,3 +25,16 @@ jobs:
         
       - name: List Los Angeles
         run : ls -la
+  
+  git_clone:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: List package
+        run : ls -al
+    
+      - name: Git clone
+        uses: actions/checkout@v1 
+        
+      - name: List package
+        run : ls -al
