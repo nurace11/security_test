@@ -50,8 +50,11 @@ jobs:
           pwd
           ls -al
           
-      - name: Grant Permission
-        run: chmod +x mvnw
+      - name: Java Version
+        run : java --version
+          
+#       - name: Grant Permission
+#         run: chmod +x mvnw
           
       - name: Test
         run : ./mvnw test
