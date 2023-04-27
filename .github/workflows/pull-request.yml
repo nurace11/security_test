@@ -6,7 +6,7 @@ on:
       - main
       - pull-request
     paths: 
-      - src
+      - 'src/**'
 
 jobs:
   first-job:
