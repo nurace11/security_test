@@ -58,6 +58,9 @@ jobs:
         with:
           java-version: 17
           
+      - name: New Java version
+        run : java --version
+          
       - name: Grant Permission
         run: chmod +x mvnw
           
