@@ -122,4 +122,12 @@
 		</plugins>
 	</build>
 
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub nurace11 Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/nurace11/security_test</url>
+		</repository>
+	</distributionManagement>
+
 </project>
