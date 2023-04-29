@@ -67,7 +67,7 @@ public class JWTCookieAuthController {
 
     private Cookie generateCookie(String token) {
         var cookie = new Cookie("jwt-token", token);
-        cookie.setHttpOnly(true); // for security
+        cookie.setHttpOnly(true);
         cookie.setMaxAge(3600); // 1 hour in seconds
         return cookie;
     }

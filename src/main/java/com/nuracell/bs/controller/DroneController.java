@@ -8,6 +8,8 @@ import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,12 +24,18 @@ public class DroneController {
     private final DroneService droneService;
 
     @GetMapping
-    public List<Drone> getDronesLimit10(@PathParam("limit") Long limit,
+    public ResponseEntity<List<Drone>> getDronesLimit10(@PathParam("limit") Long limit,
                                         @PathParam("unlimited") boolean unlimited) {
-        if (!unlimited) {
-            return droneService.findDronesLimit(Objects.requireNonNullElse(limit, 5L));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication);
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return droneService.findAll();
+
+        if (!unlimited) {
+            return ResponseEntity.ok(droneService.findDronesLimit(Objects.requireNonNullElse(limit, 5L)));
+        }
+        return ResponseEntity.ok(droneService.findAll());
     }
 
     @GetMapping("/all")
