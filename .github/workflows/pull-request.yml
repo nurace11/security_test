@@ -1,0 +1,17 @@
+name: Java Pull Requests
+
+on: 
+  pull_request:
+    branches:
+      - main
+    paths: 
+      - 'src/**'
+
+jobs:
+  first-job:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: First Step
+        run : echo "First step"
+      
